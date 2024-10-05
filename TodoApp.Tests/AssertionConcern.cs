@@ -45,7 +45,7 @@ public class AssertionConcern
         };
 
         // Act
-        taskModel.IsCompleted = true;
+        taskModel.MarkAsCompleted();
 
         // Assert
         Assert.True(taskModel.IsCompleted);
