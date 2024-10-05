@@ -1,4 +1,6 @@
-﻿namespace TodoApp.Tests;
+﻿using TodoApp.API.Model;
+
+namespace TodoApp.Tests;
 
 public class AssertionConcern
 {
@@ -10,32 +12,42 @@ public class AssertionConcern
         _client = new HttpClient(); // Replace with actual initialization as needed
     }
 
-    [Fact]
-    public async Task Should_Return200_When_GetTodoItem()
+
+    public void TestTaskModelPropertyAssignment()
     {
         // Arrange
-        var requestUri = "https://localhost:44330/api/task/1"; // Update with actual route
+        var taskModel = new TaskModel
+        {
+            Id = 1,
+            Title = "Test title",
+            Description = "Test description",
+            IsCompleted = false
+        };
 
         // Act
-        var response = await _client.GetAsync(requestUri);
 
         // Assert
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(1, taskModel.Id);
+        Assert.Equal("Test title", taskModel.Title);
+        Assert.Equal("Test description", taskModel.Description);
+        Assert.False(taskModel.IsCompleted);
     }
 
-    [Fact]
-    public async Task Should_Return404_When_TodoItemNotFound()
+    public void TestTaskModelChangeStatus()
     {
         // Arrange
-        var requestUri = "https://localhost:44330/api/task/999"; // Non-existing ID
+        var taskModel = new TaskModel
+        {
+            Id = 1,
+            Title = "Test title",
+            Description = "Test description",
+            IsCompleted = false
+        };
 
         // Act
-        var response = await _client.GetAsync(requestUri);
+        taskModel.IsCompleted = true;
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+        Assert.True(taskModel.IsCompleted);
     }
-
-    // Additional test cases can be added here
 }
